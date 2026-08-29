@@ -16,3 +16,24 @@ conda create -n rag-system python=3.8
 ```bash
 conda activate rag-system
 ```
+
+### (optional) setup CLI inference for better readiability
+```bash
+export PS1="\[\033[01;32m\]\u@\h:\w\n\[\033[00m\]\$ "
+```
+
+## Installations
+
+### Install the required packages
+
+```bash
+$ pip install -r requirements.txt
+```
+
+### setup the environment variables
+
+```bash
+cp .env.example .env
+```
+
+set your environment variables in the `.env` file. like `OPEN_AI_KEY` value.
