@@ -25,7 +25,7 @@ class DataController(BaseController):
         project_dir = ProjectController().get_project_path(project_id)
 
         # Generate a new file path with the unique key and cleaned file_name
-        new_file_path = os.path.join(project_dir, f"{unique_key}_{cleaned_file_name}")
+        new_file_path = os.path.join(project_dir, f"{unique_key}_{cleaned_file_name}")  
 
         # Ensure the file_name is unique within the project directory
         while os.path.exists(new_file_path):
