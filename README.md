@@ -38,6 +38,20 @@ $ cp .env.example .env
 
 set your environment variables in the `.env` file. like `OPEN_AI_KEY` value.
 
+## Run docker compose
+
+```bash
+$ cd docker
+$ cp .env.example .env
+```
+
+- update .env with your credentials
+
+```bash
+$ cd docker
+$ sudo docker compose up -d 
+```
+
 ## Run the FastAPI server
 
 ```bash
