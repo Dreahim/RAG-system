@@ -15,12 +15,16 @@ class ProcessController(BaseController):
         return os.path.splitext(file_id)[-1]
 
     def get_file_loader(self, file_id: str):
+
         file_extension = self.get_file_extension(file_id)
         file_path = os.path.join(
             self.project_dir, 
             file_id
         ) 
-
+        
+        if not os.path.exists(file_path):
+            return None 
+    
         if file_extension == ProcessingFileType.PDF.value:
             return PyMuPDFLoader(file_path)
         elif file_extension == ProcessingFileType.TEXT.value:
@@ -29,7 +33,9 @@ class ProcessController(BaseController):
 
     def get_file_content(self, file_id: str):
         loader = self.get_file_loader(file_id)
-        return loader.load()
+        if loader:
+            return loader.load()
+        return None
 
     def process_file_content(self, file_content: list, file_id: str,
                              chunk_size: int=100, overlap_size: int=20):
