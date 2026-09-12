@@ -1,1 +1,1 @@
-from .OpenAIProvider import OpenAIProvider
+from .providers import OpenAIProvider, CoHereProvider
