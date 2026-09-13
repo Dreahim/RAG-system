@@ -3,16 +3,18 @@ from routes import base, data
 from motor.motor_asyncio import AsyncIOMotorClient
 from helpers.config import get_settings
 from stores.llm.LLMProviderFactory import LLMProviderFactory
+from stores.vectordb.VectorDBProviderFactory import VectorDBProviderFactory
 
 app = FastAPI()
 
-async def startup_db_client():
-    # Initialize the MongoDB client and store it in the app state
+async def startup_span():
+    # Initialize the MongoDB client, database client and store them in the app state
     settings = get_settings()
     app.mongo_conn = AsyncIOMotorClient(settings.MONGODB_URL)
     app.db_client = app.mongo_conn[settings.MONGODB_DB_NAME]
 
     llm_provider_factory = LLMProviderFactory(settings)
+    Vectordb_provider_factory = VectorDBProviderFactory(settings)
 
     # generation client
     app.generation_client = llm_provider_factory.create(provider = settings.GENERATION_BACKEND)
@@ -22,13 +24,18 @@ async def startup_db_client():
     app.generation_client = llm_provider_factory.create(provider = settings.EMBEDDING_BACKEND)
     app.generation_client.set_embedding_model(model_id = settings.EMBEDDING_MODEL_ID,
                                               embedding_size = settings.EMBEDDING_MODEL_SIZE)
+    # vector db client
+    app.vectordb_client = Vectordb_provider_factory.create(
+        provider=settings.VECTOR_DB_BACKEND
+    )
 
-async def shutdown_db_client():
+async def shutdown_span():
     # Close the MongoDB connection
     await app.mongo_conn.close()
+    app.vectordb_client.disconnect
 
-app.router.lifespan.on_startup.append(startup_db_client)
-app.router.lifespan.on_shutdown.append(shutdown_db_client)
+app.router.lifespan.on_startup.append(startup_span)
+app.router.lifespan.on_shutdown.append(shutdown_span)
 
 app.include_router(base.base_router)
 app.include_router(data.data_router)
