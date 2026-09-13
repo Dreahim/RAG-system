@@ -18,18 +18,23 @@ class Settings(BaseSettings):
     GENERATION_BACKEND: str
     EMBEDDING_BACKEND: str
 
-    OPENAI_API_KEY: str
-    OPENAI_API_URL: str
+    OPENAI_API_KEY: str = None
+    OPENAI_API_URL: str = None
 
-    COHERE_API_KEY: str
+    COHERE_API_KEY: str = None
 
-    GENERATION_MODEL_ID: str
-    EMBEDDING_MODEL_ID: str
-    EMBEDDING_MODEL_SIZE: int
+    GENERATION_MODEL_ID: str = None
+    EMBEDDING_MODEL_ID: str = None
+    EMBEDDING_MODEL_SIZE: int = None
 
-    DEFAULT_INPUT_MAX_CHARACTER: int
-    DEFAULT_GENERATION_MAX_OUTPUT_TOKENS: int
-    DEFAULT_GENERATION_TEMPERATURE: float
+    DEFAULT_INPUT_MAX_CHARACTER: int = None
+    DEFAULT_GENERATION_MAX_OUTPUT_TOKENS: int = None
+    DEFAULT_GENERATION_TEMPERATURE: float = None
+
+    # Vecor DB config    
+    VECTOR_DB_BACKEND: str
+    VECTOR_DB_PATH: str
+    VECTOR_DB_DITANCE_METHOD: str = None
 
     model_config = SettingsConfigDict(
         env_file=".env",
