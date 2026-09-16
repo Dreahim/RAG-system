@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     # Vecor DB config    
     VECTOR_DB_BACKEND: str
     VECTOR_DB_PATH: str
-    VECTOR_DB_DITANCE_METHOD: str = None
+    VECTOR_DB_DISTANCE_METHOD: str = None
 
     model_config = SettingsConfigDict(
         env_file=".env",
