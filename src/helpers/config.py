@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     VECTOR_DB_PATH: str
     VECTOR_DB_DISTANCE_METHOD: str = None
 
+    # Template Configs 
+    DEFAULT_LANG: str ="en"
+
     model_config = SettingsConfigDict(
         env_file=".env",
     )
