@@ -6,7 +6,14 @@ Let's implement a RAG system
 
 - python 3.8 or later
 
-#### install python using MiniConda
+#### Install Dependencies
+
+```bash
+sudo apt update
+sudo apt install libcrypt-dev libpq-dev gcc python3-dev
+```
+
+#### Install python using MiniConda
 1) Download and install Miniconda from [here](https://www.anaconda.com/docs/getting-started/miniconda/system-requirements)
 2) Create a new conda environment using the following comand
 ```bash

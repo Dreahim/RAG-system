@@ -1,3 +1,3 @@
-from .data_chunk import DataChunk, RetrievedDocument
-from .project import Project
-from .asset import Asset
+from ragsystem import DataChunk, RetrievedDocument
+from ragsystem import Project
+from ragsystem import Asset
