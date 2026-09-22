@@ -1,8 +1,8 @@
-"""Inistial Commit
+"""Initial Commit
 
-Revision ID: f2a2520b1ab4
+Revision ID: b38867d84203
 Revises: 
-Create Date: 2026-09-21 19:12:50.391660
+Create Date: 2026-09-22 15:38:46.136916
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = 'f2a2520b1ab4'
+revision: str = 'b38867d84203'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -24,7 +24,7 @@ def upgrade() -> None:
     sa.Column('project_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('project_uuid', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.PrimaryKeyConstraint('project_id'),
     sa.UniqueConstraint('project_uuid')
     )
@@ -34,10 +34,10 @@ def upgrade() -> None:
     sa.Column('asset_type', sa.String(), nullable=False),
     sa.Column('asset_name', sa.String(), nullable=False),
     sa.Column('asset_size', sa.Integer(), nullable=False),
-    sa.Column('asset_config', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
+    sa.Column('asset_config', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('asset_project_id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['asset_project_id'], ['projects.project_id'], ),
     sa.PrimaryKeyConstraint('asset_id'),
     sa.UniqueConstraint('asset_uuid')
@@ -53,7 +53,7 @@ def upgrade() -> None:
     sa.Column('chunk_project_id', sa.Integer(), nullable=False),
     sa.Column('chunk_asset_id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['chunk_asset_id'], ['assets.asset_id'], ),
     sa.ForeignKeyConstraint(['chunk_project_id'], ['projects.project_id'], ),
     sa.PrimaryKeyConstraint('chunk_id'),
