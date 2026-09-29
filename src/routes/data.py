@@ -8,6 +8,7 @@ from models import ResponseSignal, ProjectModel, DataChunkModel, AssetModel
 from models.db_schemes import Project, DataChunk, Asset
 from models.enums.AssetTypeEnum import AssetTypeEnum
 from routes.schemes import ProcessRequest
+from controllers import NLPController
 import logging
 import os
 
@@ -84,6 +85,12 @@ async def process_data(request: Request ,project_id: int, process_request: Proce
         project_id=project_id
         )
 
+    nlp_controller = NLPController(
+        vectordb_client=request.app.vectordb_client,
+        generation_client=request.app.generation_client,
+        embedding_client=request.app.embedding_client,
+        template_parser=request.app.template_parser
+    )
 
     asset_model = await AssetModel.create_instance(
         db_client=request.app.db_client
@@ -135,6 +142,11 @@ async def process_data(request: Request ,project_id: int, process_request: Proce
     chunk_model = await DataChunkModel.create_instance(db_client=request.app.db_client)
 
     if do_reset != 0:
+        # delete associated vectors collection
+        collection_name = nlp_controller.create_collection_name(project_id=project_id)
+        _ = await request.app.vectordb_client.delete_collection(collection_name=collection_name)
+
+        # delete associated chunks
         _ = await chunk_model.delete_chunks_by_project_id(
             project_id=project.project_id
         )

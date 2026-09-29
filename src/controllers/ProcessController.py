@@ -4,6 +4,13 @@ import os
 from langchain_community.document_loaders import PyMuPDFLoader, TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from models import ProcessingFileType
+from typing import List
+from dataclasses import dataclass
+
+@dataclass
+class Document:
+    page_content: str
+    metadata: str
 
 class ProcessController(BaseController):
     def __init__(self, project_id: str):
@@ -55,9 +62,44 @@ class ProcessController(BaseController):
             for rec in file_content
         ]
 
-        chunks = text_splitter.create_documents(
-            file_content_texts,
-            metadatas=file_content_metadata
+        # chunks = text_splitter.create_documents(
+        #     file_content_texts,
+        #     metadatas=file_content_metadata
+        # )
+
+        chunks = self.process_simpler_splitter(
+            texts=file_content_texts,
+            metadatas=file_content_metadata,
+            chunk_size=chunk_size,
         )
+
+        return chunks
+
+    def process_simpler_splitter(self, texts: List[str], metadatas: List[dict], chunk_size: int, splitter_tag: str="\n"):
+        full_text = " ".join(texts)
+
+        # split by splitter_tag
+        lines = [ doc.strip() for doc in full_text.split(splitter_tag) if len(doc.strip()) > 1 ]
+
+        chunks = []
+        current_chunk = ""
+
+        for line in lines:
+            current_chunk += line + splitter_tag
+            if len(current_chunk) >= chunk_size:
+                chunks.append(Document(
+                    page_content=current_chunk.strip(),
+                    metadata={}
+                ))
+
+                current_chunk = ""
+
+        if current_chunk.strip():
+            chunks.append(
+                Document(
+                    page_content=current_chunk.strip(),
+                    metadata={}
+                )
+            )
 
         return chunks
