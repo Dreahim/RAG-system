@@ -7,7 +7,13 @@ from stores.llm.templates import TemplateParser
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
+# Import metrics setup
+from utils.metrics import setup_metrics
+
 app = FastAPI()
+
+# Setup Prometheus metrics
+setup_metrics(app)
 
 async def startup_span():
     # Initialize the MongoDB client, database client and store them in the app state
